@@ -102,6 +102,8 @@ int main(int argc, char **argv) {
     int32_t n_vars = 0;
     vector<int32_t> soft_lits;
 
+    Chrono c;
+    c.tic();
 
     if (!initialize_solver(solver, n_vars, soft_lits, argv[1])) {
         cout << "ERROR: Input file cannot be read.\n";
@@ -217,8 +219,6 @@ int main(int argc, char **argv) {
     }
     res = solve_and_print_result(solver, n_vars);
 
-
-
     //std::cout << "========================================================"   << std::endl;
     //std::cout << "Weights of random soft clauses is changed between 1 of 10." << std::endl;
     //std::cout << "========================================================"   << std::endl;
@@ -238,5 +238,8 @@ int main(int argc, char **argv) {
 
 
     ipamir_release(solver);
+
+    std::cout << "time: ";
+    c.print();
     return 0;
 }
