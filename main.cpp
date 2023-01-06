@@ -102,9 +102,6 @@ int main(int argc, char **argv) {
     int32_t n_vars = 0;
     vector<int32_t> soft_lits;
 
-    Chrono c;
-    c.tic();
-
     if (!initialize_solver(solver, n_vars, soft_lits, argv[1])) {
         cout << "ERROR: Input file cannot be read.\n";
         return 0;
@@ -114,20 +111,6 @@ int main(int argc, char **argv) {
 
     res = solve_and_print_result(solver, n_vars);
 
-    /*ipamir_add_soft_lit(solver, -1, 2);
-
-    res = solve_and_print_result(solver, n_vars);
-
-    exit(0);*/
-
-    //ipamir_add_soft_lit(solver, 1, 4);
-    //res = solve_and_print_result(solver, n_vars);
-
-    //exit(0);
-
-
-    if (argc == 3)
-        exit(0);
     if (res == 20) {
         ipamir_release(solver);
         return 0;
@@ -181,7 +164,6 @@ int main(int argc, char **argv) {
             }
         }
     }
-    // ERROR HERE (-1 cost)
     res = solve_and_print_result(solver, n_vars);
 
     //exit(0);
@@ -212,34 +194,29 @@ int main(int argc, char **argv) {
     res = solve_and_print_result(solver, n_vars);
 
 
-    // TODO : REMOVE !!!!!!
     for(int i = 0; i <soft_lits.size(); i++){
         if (i%2)
             ipamir_assume(solver, soft_lits[i]);
     }
     res = solve_and_print_result(solver, n_vars);
 
-    //std::cout << "========================================================"   << std::endl;
-    //std::cout << "Weights of random soft clauses is changed between 1 of 10." << std::endl;
-    //std::cout << "========================================================"   << std::endl;
     int j = 1;
+    auto size = soft_lits.size();
+    int compare1 = size/2;
+    int compare2 = size/4;
     for(int i = 0; i <soft_lits.size(); i++){
-        if (i%10){
+        if ( i == compare1 || i == compare2 ){
             if (j%10 == 0) j=1;
-            //std::cout << "c Set " << soft_lits[i] << " to weight " << j%10 << std::endl;
             ipamir_add_soft_lit(solver, soft_lits[i], j%10);
-
         }
         j++;
     }
+  
     res = solve_and_print_result(solver, n_vars);
 
     res = solve_and_print_result(solver, n_vars);
-
 
     ipamir_release(solver);
 
-    std::cout << "time: ";
-    c.print();
     return 0;
 }
